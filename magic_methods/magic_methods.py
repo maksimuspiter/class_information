@@ -1,37 +1,12 @@
 from random import choice
 
-
-class A:
-    def __str__(self):
-        pass
-
-    def __new__(cls, *args, **kwargs):
-        print('news method')
-        return super(A, cls).__new__(cls, *args, **kwargs)
-
-    def __init__(self):
-        pass
-
-    x = 1
-
-
-class Something:
-
-    def __new__(cls, *args, **kwargs):
-        print(f'конструируем: {args} | {kwargs}')
-
-        instance = super().__new__(cls)
-
-        # и вдруг нам захотелось добавить атрибут на лету
-        instance.new_attribute = 'добавлено'
-
-        print('почти готово')
-
-        return instance
-
-    def __init__(self, *args, **kwargs):
-        print(f'инициализируем: {args} | {kwargs}')
-        print(self.new_attribute)
+"""
+Методы: __new__(cls, *args, **kwargs)
+        __init__(self, *args, **kwargs)
+        __str__(self)
+        __sub__(self, other)
+        __add__(self, other)
+"""
 
 
 class Distance(float):
@@ -41,6 +16,8 @@ class Distance(float):
             def __new__(cls, *args, **kwargs) - классика, редко нужен
             отрабатывает первый, нужен для расширения списка атрибутов класса (унаследованных)
             cls - ссылка на тип класса, должен возвращать cls
+
+            Метод ----> @staticmethod, указывать не нужно (по умолчанию в object)
 
 
             !!! Можно использовать для ссылки(наследования) на другой класс, с целью стать его ребенком
@@ -98,18 +75,34 @@ class Distance(float):
         """
         return f"{self.value} {self.unit}"
 
+    def __del__(self):
+        """
+        Описывает действия при удалении экземпляра.
+        Автоматически вызывается в Python, когда экземпляр собираются уничтожить.
+        Вызывается для любого объекта, когда счетчик ссылок для этого объекта становится равным нулю.
+        """
+        print('Object destroyed')
+
     def __sub__(self, other):
+        """
+            Метод описывающий операцию вычитания
+        """
         if type(other) in [int, float, Distance]:
             self.value = float(self.value) - float(other)
             return self
         else:
             return 'Неправильный тип входного значения'
 
-
     def __add__(self, other):
+        """
+                    Метод описывающий операцию сложения
+                """
         if type(other) in [int, float, Distance]:
             self.value = float(self.value) + float(other)
             return self
         else:
             return 'Неправильный тип входного значения'
 
+
+class A(object):
+    pass
